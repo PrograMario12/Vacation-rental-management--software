@@ -27,7 +27,7 @@ export const signin = async (req, res) => {
   const token = await createAccessToken({ id: result.rows[0].empleado_id });
 
   res.cookie("token", token, {
-    httpOnly: true,
+    // httpOnly: true,
     // secure: true,
     sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000, // 1 day
@@ -37,21 +37,21 @@ export const signin = async (req, res) => {
 };
 
 export const signup = async (req, res, next) => {
-  const { email, empleado_id, contrasena_hash, rol_id, ultimo_acceso, activo } = req.body;
+  const { email, empleado_id, contrasena_hash } = req.body;
 
   try {
     const hashedPassword = await bcrypt.hash(contrasena_hash, 10);
     const gravatar = `https://www.gravatar.com/avatar/${md5(email)}`;
 
     const result = await pool.query(
-      "INSERT INTO usuarios(email, empleado_id, contrasena_hash, rol_id, ultimo_acceso, activo, avatar) VALUES($1, $2, $3, $4, $5, $6, $7) Returning *",
-      [email, empleado_id, hashedPassword, rol_id, ultimo_acceso, activo, gravatar]
+      "INSERT INTO usuarios(email, empleado_id, contrasena_hash, rol_id,  activo, avatar) VALUES($1, $2, $3, 1, 'true', $4) Returning *",
+      [email, empleado_id, hashedPassword, gravatar]
     );
 
     const token = await createAccessToken({ id: result.rows[0].usuario_id });
 
     res.cookie("token", token, {
-      httpOnly: true,
+      //httpOnly: true,
       // secure: true,
       sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000, // 1 day

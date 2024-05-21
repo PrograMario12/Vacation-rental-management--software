@@ -2,7 +2,7 @@ import {pool} from '../db.js'
 
 //Función para obtener todas las ausencias
 export const getAllTasks = async (req, res, next) => {
-    const result = await pool.query('SELECT * FROM ausencias WHERE user_id = $1', [req.userId]);
+    const result = await pool.query('SELECT * FROM ausencias WHERE ausencia_id = $1', [req.userId]);
     console.log(result);
     return res.json(result.rows);
 };
