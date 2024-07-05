@@ -11,8 +11,8 @@ function HomePage() {
       </header>
       <main className="container mx-auto py-8">
         <article className="bg-white rounded-lg shadow-lg p-6 mb-4">
-          <h2 className="text-2xl font-bold mb-2 text-black ">Solicitud</h2>
-          <p className="text-black" >Aquí debe ir la solicitud</p>
+          <h2 className="text-2xl font-bold mb-2 text-black ">Noticias importantes</h2>
+          <p className="text-black">¡Gracias por su atención!</p>
         </article>
       </main>
       <footer className="bg-red-500 py-4">

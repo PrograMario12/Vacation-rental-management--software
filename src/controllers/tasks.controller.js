@@ -2,8 +2,7 @@ import {pool} from '../db.js'
 
 //Función para obtener todas las ausencias
 export const getAllTasks = async (req, res, next) => {
-    const result = await pool.query('SELECT * FROM ausencias WHERE ausencia_id = $1', [req.userId]);
-    console.log(result);
+    const result = await pool.query('SELECT * FROM ausencias WHERE empleado_id = $1', [req.userId]);
     return res.json(result.rows);
 };
 
@@ -23,21 +22,13 @@ export const getTask = async (req, res, next) => {
 
 //Función para crear una ausencia
 export const createTask = async (req, res, next) => {
-    const {empleado_id, fecha_inicio, fecha_fin, horas, tipo, estado} = req.body;
-
-    // Validar que todos los datos están presentes en req.body
-    if (!empleado_id || !fecha_inicio || !fecha_fin || !horas || !tipo || !estado) {
-        return res.status(400).json({ message: 'Faltan datos en req.body' });
-    }
-        
-    // Validar que los datos son del tipo correcto
-    if (typeof empleado_id !== 'number' || typeof fecha_inicio !== 'string' || typeof fecha_fin !== 'string' || typeof horas !== 'number' || typeof tipo !== 'string' || typeof estado !== 'string') {
-        return res.status(400).json({ message: 'Tipo de dato incorrecto' });
-    }
+    const {empleado_id, fecha_inicio, fecha_fin, horas, tipo} = req.body;
+    console.log(req.body);
 
     try{
-        const result = await pool.query('INSERT INTO ausencias (empleado_id, fecha_inicio, fecha_fin, horas, tipo, estado) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [empleado_id, fecha_inicio, fecha_fin, horas, tipo, estado]);
+        const result = await pool.query("INSERT INTO ausencias (empleado_id, fecha_inicio, fecha_fin, horas, tipo, estado) VALUES ($1, $2, $3, $4, $5, 'Pendiente') RETURNING *", [empleado_id, fecha_inicio, fecha_fin, horas, tipo]);
 
+        //console.log(result)
         res.json(result.rows[0]);
     }catch(e){
         if(e.code === '23505'){
@@ -45,6 +36,7 @@ export const createTask = async (req, res, next) => {
                 message: 'El ID ya existe'
             });
         }
+        return res.status(500).json({ message: 'Error al crear la ausencia', error: e.message });
     }
 };
 

@@ -12,11 +12,22 @@ export const useAuth = () => {
     return context
 }
 
+/**
+ * Provides authentication functionality to the application.
+ * @param {Object} props - The component props.
+ * @param {ReactNode} props.children - The child components.
+ * @returns {JSX.Element} The AuthProvider component.
+ */
 export function AuthProvider({children}) {
     const [user, setUser] = useState(null)
     const [isAuth, setIsAuth] = useState(false)
     const [errors, setErrors] = useState(null)
 
+  /**
+   * Signs in the user with the provided data.
+   * @param {Object} data - The user data.
+   * @returns {Promise<Object>} A promise that resolves to the response data.
+   */
   const signin = async (data) => {
     try {
       const response = await axios.post('/signin', data)
@@ -34,6 +45,11 @@ export function AuthProvider({children}) {
     }
   }
 
+  /**
+   * Signs up the user with the provided data.
+   * @param {Object} data - The user data.
+   * @returns {Promise<Object>} A promise that resolves to the response data.
+   */
   const signup = async (data) =>{
     try {
       const response = await axios.post('/signup', data)
@@ -50,6 +66,15 @@ export function AuthProvider({children}) {
     }
   };
 
+  /**
+   * Signs out the user.
+   * @returns {Promise<void>} A promise that resolves when the user is signed out.
+   */
+  const signout = async () => {
+    await axios.post('/signout');
+    setUser(null);
+    setIsAuth(false);
+  }
 
   useEffect(() => {
     if (Cookie.get('token')) {
@@ -60,7 +85,6 @@ export function AuthProvider({children}) {
         setIsAuth(true)
       })
       .catch((error) => {
-        console.log(error)
         setIsAuth(false)
         setUser(null)
       })
@@ -73,7 +97,8 @@ export function AuthProvider({children}) {
         isAuth,
         errors,
         signup,
-        signin
+        signin,
+        signout
     }}>
       {children}
     </AuthContext.Provider>

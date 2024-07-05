@@ -1,16 +1,11 @@
 import { z } from "zod";
 
 export const createRequestSchema = z.object({
-  empleado_id: z.number().positive().refine(n => Number.isInteger(n), {
-    message: "empleado_id must be an integer",
-  }),
+  empleado_id: z.string().nonempty(),
   fecha_inicio: z.string().nonempty(),
   fecha_fin: z.string().nonempty(),
-  estado: z.string().nonempty(),
   tipo: z.string().nonempty(),
-  horas: z.number().positive().refine(n => Number.isInteger(n), {
-    message: "horas must be an integer",
-  }).optional(),
+  horas: z.string().nonempty(),
 });
 
 export const updateRequestSchema = z.object({

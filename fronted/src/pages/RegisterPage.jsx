@@ -1,4 +1,4 @@
-import {Button, Card, Input, Label} from '../components/ui'
+import {Button, Card, Input, Label, Container} from '../components/ui'
 import {useForm} from 'react-hook-form'
 import {Link, useNavigate} from 'react-router-dom'
 import {useAuth} from '../context/AuthContext'
@@ -22,7 +22,7 @@ const onSubmit = handleSubmit(async (data) => {
 })
 
   return (
-    <div className='h-[calc(100vh-64px)] flex items-center justify-center'>
+    <Container className='h-[calc(100vh-64px)] flex items-center justify-center'>
       <Card>
       {
       signupErrors && signupErrors.map((error, index) => (
@@ -72,7 +72,7 @@ const onSubmit = handleSubmit(async (data) => {
           </div>
         </form>
       </Card>
-    </div>
+    </Container>
   )
 }
 
